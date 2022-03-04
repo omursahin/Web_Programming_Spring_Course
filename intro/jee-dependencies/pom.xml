@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <artifactId>jee-dependencies</artifactId>
+    <packaging>pom</packaging>
+
+    <parent>
+        <artifactId>intro</artifactId>
+        <groupId>org.webp.intro</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+
+
+    <properties>
+        <version.hibernate.core>5.4.27.Final</version.hibernate.core>
+        <version.hibernate.validator>6.2.0.Final</version.hibernate.validator>
+        <version.javax.el>3.0.0</version.javax.el>
+    </properties>
+
+    <!--
+       Hibernate nedeniyle "intro"'da pom.xml'de tanımlamak yerine BOM (Bill Of Material)
+       kullanıyoruz. "jee" ve bazı exercises içindeki bazı modüllerde WildFly (içerisinde Hibernate bulunan)
+       kullandığımız için "provided" scope'da olması gerekirken, SpringBoot'da böyle kullanamayız ve orada tekrar
+       scope belirtmemiz gerekir. Bu şekilde yapmasak bütün uygulamalarda ayrı ayrı belirtmemiz gerekirdi.
+
+       BOM tanım örneğidir.
+       Ve bir BOM diğer BOM'ları kullanabilir, ör: org.jboss.spec
+   -->
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.jboss.spec</groupId>
+                <artifactId>jboss-javaee-8.0</artifactId>
+                <version>1.0.1.Final</version>
+                <!-- BOM: Bu bağımlılığın pom dosyasındaki tüm kütüphaneleri import et  -->
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.junit</groupId>
+                <artifactId>arquillian-junit-container</artifactId>
+                <version>1.5.0.Final</version>
+                <!-- test scope olduğundan emin olunmalıdır -->
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.arquillian.core</groupId>
+                <artifactId>arquillian-core-api</artifactId>
+                <version>1.5.0.Final</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.wildfly.arquillian</groupId>
+                <artifactId>wildfly-arquillian-container-managed</artifactId>
+                <version>2.2.0.Final</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!--
+                JEE için
+                <scope>provided</scope>
+                oldukça önemlidir.
+                Anlamı bu kütüphaneler derleme ve testte gerekli iken WAR/JAR dosyasında bulunmayacaktır.
+                Neden? Çünkü JEE container'ları zaten bunları barındırmaktadır. Ancak, hangi containerı kullanacağınıza göre
+                bu da değişmektedir. Biz Wildfly kullanacağız.
+            -->
+            <dependency>
+                <groupId>javax</groupId>
+                <artifactId>javaee-api</artifactId>
+                <version>8.0.1</version>
+                <scope>provided</scope>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>${version.hibernate.core}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>${version.hibernate.validator}</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${version.h2}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- JEE yerine SE kullanıldığında Hibernate kullanmak için gereklidir -->
+            <dependency>
+                <groupId>javax.el</groupId>
+                <artifactId>javax.el-api</artifactId>
+                <version>${version.javax.el}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish</groupId>
+                <artifactId>javax.el</artifactId>
+                <version>${version.javax.el}</version>
+            </dependency>
+
+            <!-- EclipseLink için -->
+            <dependency>
+                <groupId>org.eclipse.persistence</groupId>
+                <artifactId>org.eclipse.persistence.jpa</artifactId>
+                <version>2.7.5</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

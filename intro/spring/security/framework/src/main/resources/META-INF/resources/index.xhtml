@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:sec="http://www.springframework.org/security/tags"
+>
+
+<h:head>
+    <title>Spring Security Örneği</title>
+</h:head>
+
+<h:body>
+    <h2>Veritabanlı Spring Security Örneği</h2>
+
+    <br/>
+
+    <!--
+        Spring Security ile kimliklendirilip kimliklendirilmediğimizi bilmek için özel
+        JSF'te de kullanılabilen JSP taglarını kullanabiliriz
+    -->
+
+    <sec:authenticated>
+        <p><h:outputText value="Hi #{userInfoController.userName}!!!" id="helloMsgId"/></p>
+
+        Korunan kaynağa ait <a href="/protected.jsf" id="protectedLinkId">Link</a>.
+
+        <br/>
+
+        <form action="/logout">
+            <input value="Log out" type="submit" id="logoutBtnId"/>
+        </form>
+    </sec:authenticated>
+
+    <sec:anonymous>
+        <p>Giriş Yapmadınız</p>
+        <h:button id="loginBtnId" outcome="/login.jsf" value="Log In"/>
+        <h:button id="signupBtnId" outcome="/signup.jsf" value="Sign Up"/>
+    </sec:anonymous>
+</h:body>
+</html>

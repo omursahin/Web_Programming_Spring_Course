@@ -1,0 +1,9 @@
+jsf:
+  project-stage: development
+
+spring:
+  jpa:
+    # yalnızca debug için
+    show-sql: true
+
+

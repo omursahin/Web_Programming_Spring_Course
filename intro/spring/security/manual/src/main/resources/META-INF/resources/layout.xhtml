@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+>
+    <!--
+    Varsayılan layout tanımı, ortak sayfalar (header/footer vs.) nerede bulunacak burada tanımlanır
+    -->
+
+
+    <h:head>
+        <title>
+            <ui:insert name="title">Varsayılan başlık</ui:insert>
+        </title>
+    </h:head>
+
+
+    <h:body>
+
+        <p>
+            <a href="/" id="backHomeId">Anasayfaya</a> geri dön.
+        </p>
+        <hr/>
+
+
+        <h1>
+            <ui:insert name="title">Varsayılan başlık</ui:insert>
+        </h1>
+        <hr/>
+
+
+        <ui:insert name="content">Varsayılan içerik</ui:insert>
+
+        <hr/>
+
+
+    </h:body>
+</html>

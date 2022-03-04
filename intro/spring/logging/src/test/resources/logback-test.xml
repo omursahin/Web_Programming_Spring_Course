@@ -1,0 +1,36 @@
+<configuration>
+
+
+    <appender name="REGULAR_STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <root level="warn">
+        <appender-ref ref="REGULAR_STDOUT" />
+    </root>
+
+    <logger name="org.webp" level="INFO" />
+
+    <!-- Burada ServiceY'yi Debug seviyesine çekerek diğerlerinden ayırıyoruz -->
+    <logger name="org.webp.intro.spring.logging.ServiceY" level="DEBUG" />
+
+
+    <!-- Daha fazla appender de eklenebilir -->
+    <appender name="SPRING" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[SPRING] %-5level -  %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--
+        Burada Spring'in farklı bir appender kullanmasını ve daha üst bir ayarlamadan (root'daki appender gibi)
+        devralmamasını istiyoruz. Bir log aynı anda birden fazla appender'a gönderilebilir
+     -->
+    <logger name="org.springframework" level="INFO" additivity="false">
+        <appender-ref ref="SPRING" />
+    </logger>
+
+</configuration>

@@ -1,0 +1,40 @@
+<configuration>
+
+    <!--
+        Appender kullanarak log ifadesi ile ne yapacağımızı belirleyebiliriz.
+        Genelde yalnızca konsole çıktılar yazdırılır ancak diske yazmak veya
+        TCP ile uzak sunucuya göndermek gibi farklı seçenekler de bulunur.
+    -->
+    <appender name="REGULAR_STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!--
+                Burada mesajın nasıl görüneceğini tanımlayabiliriz. Bu örnekte:
+                - zaman
+                - logger'ı çalıştıran thread
+                - logger seviyesi
+                - logger adı (36 karaktere kadar)
+                - ve mesaj
+                Değişkenlere % kullanarak erişim sağlayabiliriz
+            -->
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!--
+        3. parti uygulamalar dahil olmak üzere classpath'deki tanımlı bütün uygulamalar için
+        root seviyesinde logger tanımı
+    -->
+    <root level="warn">
+        <appender-ref ref="REGULAR_STDOUT" />
+    </root>
+
+    <!--
+        Burada da uygulama kodlarımızın (paket prefix'ine göre) logger tanımı.
+        Buradaki tanıma göre diğer uygulamalar WARN seviyesindeyken kendi kodlarımız INFO
+        seviyesinde
+     -->
+    <logger name="org.webp" level="INFO" />
+
+
+</configuration>

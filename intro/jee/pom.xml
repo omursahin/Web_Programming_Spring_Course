@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <groupId>org.webp.intro.jee</groupId>
+    <artifactId>jee</artifactId>
+    <packaging>pom</packaging>
+
+    <parent>
+        <artifactId>intro</artifactId>
+        <groupId>org.webp.intro</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>jpa</module>
+        <module>ejb</module>
+        <module>jsf</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--
+                "jee" içindeki bütün modüller parent pom'lardan ("intro" ve "root") miras almıştır.
+                Ancak ayrıca "jee-dependencies" modülündeki (yalnızca pom dosyası, kod yok)
+                bütün ayarlamaları da import etmek istiyoruz. Çözüm olarak bu ikinci parent bağımlılık
+                olarak import ediliyor.
+
+                Not, bunu yapmamızın iki sebebi var:
+                1) SpringBoot bağımlılıklarını bu türde bir yöntem ile import edeceğimizden
+                böyle ayrık bir BOM örneği göstermek
+                2) Hibernate bağımlılıklarını 2 farklı ("compile" ve "provided") scope'da kullanacağız.
+                Varsayılan olarak "compile" olarak tutacağız ancak "provided" olması gerekirse (burada sadece
+                "jee" modülünde gerekiyor) bu BOM'u import edeceğiz.
+
+             -->
+
+            <dependency>
+                <groupId>org.webp.intro</groupId>
+                <artifactId>jee-dependencies</artifactId>
+                <version>${project.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+</project>

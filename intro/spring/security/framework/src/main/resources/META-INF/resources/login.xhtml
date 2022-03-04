@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+>
+<h:head>
+    <title>Login</title>
+</h:head>
+<h:body>
+    <h:form prependId="false">
+        <h:outputLabel value="Login failed: user and/or password are wrong."
+                       rendered="${!empty param['error']}"/>
+        <!-- Not: bu spesifik ID'lere ihtiyaç vardır yoksa Spring Security varsayılan olarak
+        bunları tanımayacaktır.
+          -->
+        <h:panelGrid columns="2" layout="grid">
+            <h:outputText value="username"/>
+            <h:inputText id="username"/>
+            <h:outputText value="password"/>
+            <h:inputSecret id="password"/>
+        </h:panelGrid>
+        <h:commandButton id="submitBtnId" value="Log in"/>
+    </h:form>
+</h:body>
+</html>

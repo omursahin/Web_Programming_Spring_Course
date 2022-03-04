@@ -1,0 +1,68 @@
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+
+  <display-name>JSF Örnekleri</display-name>
+
+  <!-- varsayılan sayfa, hatırlayınız, hiçbir şey tanımlı değilse index.html varsayılan sayfa olur... -->
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+
+  <!--
+    Servlet'ler, istemciden HTTP isteklerini almaktan ve işlemekten sorumlu
+    olan JEE container'ı içindeki özel bileşenlerdir. Burada, JSF'den sorumlu
+    sunucu uygulamasını başlatmamız gerektiğini söylüyoruz (birkaç farklı türde
+    sunucu uygulaması olabilir, ancak bu derste sadece JSF göreceğiz).
+  -->
+  <servlet>
+    <servlet-name>Faces Servlet</servlet-name>
+    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+
+  <!--
+    Burada, istenen URL'nin JSF sunucu uygulaması tarafından ele alınacağını,
+    tüm URL'lerin ".faces" ve ".jsf" ile biteceğini söylüyoruz.
+    Not: Burada iki sunucu uygulaması olması gerekir, yani iki adet olması biraz fazlalıktır.
+    Ayrıca, sunucu uygulaması adının daha önce <servlet> tanımında
+    kullanılanla aynı olduğundan emin olun.
+  -->
+  <servlet-mapping>
+    <servlet-name>Faces Servlet</servlet-name>
+    <url-pattern>*.faces</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Faces Servlet</servlet-name>
+    <url-pattern>*.jsf</url-pattern>
+  </servlet-mapping>
+
+  <!--
+    Not: Aşağıdaki tanım daha sonra önemli olacaktır. İstemci bir XHTML isterse,
+    JSF tarafından işlenmeli ve "ham" verilmemelidir.
+    Ancak, burada eğitim amaçlı olması için işlenmemiş olarak veriyoruz.
+  -->
+  <!--<servlet-mapping>-->
+    <!--<servlet-name>Faces Servlet</servlet-name>-->
+    <!--<url-pattern>*.xhtml</url-pattern>-->
+  <!--</servlet-mapping>-->
+
+
+  <!-- Daha iyi debug ve hata mesajları için aktifleştirilir -->
+  <context-param>
+    <param-name>javax.faces.PROJECT_STAGE</param-name>
+    <param-value>Development</param-value>
+  </context-param>
+
+
+  <!--
+    Oldukça önemli bir parametredir: JSF servlet'e bütün XHTML içindeki HTML/XML yorum
+    satırlarını geçmesini söylüyoruz
+  -->
+  <context-param>
+    <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+    <param-value>true</param-value>
+  </context-param>
+
+</web-app>

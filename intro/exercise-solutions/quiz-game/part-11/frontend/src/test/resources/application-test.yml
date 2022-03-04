@@ -1,0 +1,13 @@
+jsf:
+  projectStage: Development
+
+spring:
+  datasource:
+    url: "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1"
+    driver-class-name: "org.h2.Driver"
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    database: h2
+    show-sql: true
+    hibernate:
+      ddl-auto: validate

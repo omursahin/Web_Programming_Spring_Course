@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+
+
+<ui:composition template="layout.xhtml">
+
+    <ui:define name="title">
+        Login Örneği
+    </ui:define>
+
+
+    <ui:define name="content">
+
+        <hr/>
+
+        <c:choose>
+            <c:when test="#{loginController.loggedIn}">
+                <h:form id="logoutForm">
+                    <h:outputText value="Hi #{loginController.registeredUser}!  "/>
+                    <h:commandButton value="Log Out" action="#{loginController.logOut}" id="logoutButton"/>
+                </h:form>
+            </c:when>
+            <c:otherwise>
+                <h:outputText value="Not logged in  "/>
+                <h:button value="Log In" outcome="login.jsf" id="loginButton"/>
+            </c:otherwise>
+        </c:choose>
+
+
+        <!-- Yeni post oluşturmayı yalnızca giriş yapmış kullanıcılar yapabilir -->
+        <c:if test="#{loginController.loggedIn}">
+            <h:form id="postForm">
+                <h:outputLabel value="New post:"/>
+                <h:inputTextarea value="#{postController.formText}" cols="50" rows="5" id="postText"/>
+                <h:commandButton value="Post" action="#{postController.doPostText(loginController.registeredUser)}"
+                    id="createPost"/>
+            </h:form>
+        </c:if>
+
+
+        <h2>Son Haberler</h2>
+
+
+        <c:if test="#{postController.allPosts.size() == 0}">
+            <h:outputText value="No news yet :( "/>
+        </c:if>
+
+
+        <!-- burada bir tablo kullanılabilir. Örnek olduğu için forEach ile yapacağız -->
+        <div id="posts">
+            <c:forEach var="post" items="#{postController.allPosts}">
+
+                <div class="post">
+                    <h:outputText value="#{post.author.userId} wrote on #{post.creationTime}: #{post.text}">
+                        <f:convertDateTime pattern="MM/dd/yy - hh:mm"/>
+                    </h:outputText>
+
+                    <!--
+                        Yalnızca post'un author'u silebilir.
+                        Not: bu düşük seviye güvenlik önlemidir. Bir hacker doğrudan HTTP çağrısını
+                        doğru ayarlamalarla birlikte oluşturup gönderebilir.
+                    -->
+                    <c:if test="#{post.author.userId.equals(loginController.registeredUser)}">
+                        <div class="deleteButton">
+                            <h:form prependId="false">
+                                <h:commandButton
+                                        value="Delete"
+                                        action="#{postController.deletePost(post.id)}"
+                                        id="deleteButton_#{post.id}"/>
+                            </h:form>
+                        </div>
+                    </c:if>
+                </div>
+                <hr/>
+            </c:forEach>
+        </div>
+
+    </ui:define>
+
+</ui:composition>
+
+</html>

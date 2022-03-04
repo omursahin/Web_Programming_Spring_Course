@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+>
+
+
+<ui:composition template="/layout.xhtml">
+
+    <ui:define name="title">
+        SessionScoped vs. RequestScoped
+    </ui:define>
+
+
+
+    <ui:define name="content">
+
+        <p>
+            <b>SessionScoped</b> olarak belirtilmiş bir  JSF managed bean bütün <em>session</em> boyunca canlı kalacaktır.
+            <b>RequestScoped</b> olarak işaretlenmiş bean ise HTTP isteği (tek bir GET veya POST) boyunca canlı kalacaktır.
+        </p>
+
+
+        <h2>RequestScoped Kullanan Sayaç</h2>
+        <h:form id="formRequest">
+            <h:commandButton value="+" action="#{requestCounter.increaseCounter}" id="requestPlusButtonId"/>
+            <h:commandButton value="-" action="#{requestCounter.decreaseCounter}" id="requestMinusButtonId"/>
+            <h:outputText    value="#{requestCounter.counter}"                    id="requestCounterTextId"/>
+            <h:commandButton value="Reset" action="#{requestCounter.reset}"       id="requestResetButtonId" />
+        </h:form>
+
+        <h2>SessionScoped Kullanan Sayaç</h2>
+        <h:form id="formSession">
+            <h:commandButton value="+" action="#{sessionCounter.increaseCounter}" id="sessionPlusButtonId"/>
+            <h:commandButton value="-" action="#{sessionCounter.decreaseCounter}" id="sessionMinusButtonId"/>
+            <h:outputText    value="#{sessionCounter.counter}"                    id="sessionCounterTextId"/>
+            <h:commandButton value="Reset" action="#{sessionCounter.reset}"       id="sessionResetButtonId" />
+        </h:form>
+
+        <p>
+            RequestedScoped kullanıldığında yalnızca bazı verilerin transferi (formdaki veriler gibi) transferi
+            amaçlanmalıdır. Bu veriler kullanıcı etkileşimleri/session sırasında tutulmamaktadır.
+            Bu yüzden artı butonuna tıklandığında yeni bir counter bean'i 0 değeri ile oluşturulur ve kullanılır. SessionScoped'da
+            ise her zaman aynı örnek kullanılır. Maliyeti daha fazladır ve her kullanıcı için hafızada bir yer saklar.
+            <em>Peki sunucu isteklerin session boyunca aynı kullanıcıdan geldiğini nasıl bilebilmektedir???</em>
+            Bu bilgi <b>cookie</b> aracılığı ile aktarılır.
+        </p>
+
+    </ui:define>
+
+</ui:composition>
+
+</html>

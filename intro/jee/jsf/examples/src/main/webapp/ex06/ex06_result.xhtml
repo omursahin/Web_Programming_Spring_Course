@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+>
+
+
+<ui:composition template="/layout.xhtml">
+
+    <ui:define name="title">
+        Yönlendirme Görüntüleme Sayfası
+    </ui:define>
+
+    <ui:define name="content">
+
+        <p>
+            <a href="ex06_main.jsf"> Ex6 Anasayfasına </a> geri dön.
+        </p>
+
+        <br/>
+
+        <p>
+            Session Sayacı: <h:outputText style="font-weight: bold;" value="#{sessionCounter.counter}"/>
+        </p>
+
+        <br/>
+
+        Bu sayfaya nasıl erişildiğine göre tarayıcıdaki URL farklı olacaktır:
+
+
+        <ul>
+            <li><span style="font-style: italic;">İlet (Forward)</span>:
+                URL aynı kalmaya devam edecek ve
+                <span style="font-weight: bold;">ex06_main.xhtml</span> gösterecektir,
+                çünkü bu sayfa POST isteğinin payload'ı olarak döndü.
+            </li>
+            <li><span style="font-style: italic;">Yönlendir (Redirect)</span>:
+                URL bu sayfa için doğru olan biri olarak değişecektir, ör:
+                <span style="font-weight: bold;">ex06_result.xhtml</span>.
+                POST isteğinin cevabında payload bulunmaz, bunun yerine 302 yönlendirmesi ve
+                <span style="font-weight: bold;">ex06_result.xhtml</span>'ı gösteren
+                <span style="font-style: italic;">Location</span>
+                header'ı bulunur.
+                Bu durumda tarayıcı bu sayfayı çekebilmek için ikinci bir istek (GET) yapacaktır böylelikle
+                tarayıcıdaki URL değişecektir.
+            </li>
+        </ul>
+
+        <p>
+            Buraya
+            <span style="font-style: italic;">Forward</span>
+            veya
+            <span style="font-style: italic;">Redirect</span>
+            ile gelmiş olmamız tarayıcıdaki
+            <span style="font-style: italic;">Bu sayfayı yenile</span>
+            butonunun çalışmasını da etkiler. Bu buton en sonki yürütülen HTTP komutunu tekrarlar.
+            Eğer redirect yapıldıysa tekrar GET ile sayfayı çekecektir ve aynı sayaç değeri gelecektir.
+            Eğer forward yapıldıysa son komut olan POST gerçekleştirilir ve bu da sayacı artıracaktır!!!
+            Bu eylemi izlemek için Chrome'daki
+            <span style="font-style: italic;">Developer Tools</span>'daki
+            <span style="font-style: italic;">Network</span> sekmesini kullanabilirsiniz
+        </p>
+
+        <br/>
+
+        <p>
+            Kısaca: ne yaptığınızı tam olarak bilmiyorsanız
+            <span style="font-style: italic;">Redirect</span> kullanın.
+        </p>
+
+    </ui:define>
+
+</ui:composition>
+
+</html>

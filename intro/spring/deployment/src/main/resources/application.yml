@@ -1,0 +1,14 @@
+jsf:
+  projectStage: Production
+
+# Note: Veritabanının URL'inin belirtilmesine gerek yok çünkü Heroku
+# otomatik olarak environmental variables kullanarak belirtecektir
+
+spring:
+  datasource:
+    driver-class-name: "org.postgresql.Driver"
+  jpa:
+    show-sql: false
+    hibernate:
+      ddl-auto: "update"
+

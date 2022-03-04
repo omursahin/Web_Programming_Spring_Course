@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+
+    <artifactId>spring-mocking</artifactId>
+    <packaging>jar</packaging>
+
+    <parent>
+        <groupId>org.webp.intro.spring.testing</groupId>
+        <artifactId>spring-testing</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <!--
+                Spring, Mockito tarafında da kullanılan byte-buddy
+                isimli kendi bağımlılığı ile birlikte gelir. Ancak versiyonlar
+                çakışma yaşayabilirler. Bu çakışmayı engellemek için
+                versiyonu açıkça belirtmeliyiz.
+                Root pom dosyasında değil burada belirtme sebebimiz bunu
+                sadece Mockito'da kullanıyor olmamız ve versiyon değiştirmemiz
+                durumunda Spring tarafında side-effectlere yol açma ihtimalidir.
+            -->
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.10.2</version>
+        </dependency>
+
+    </dependencies>
+
+
+</project>

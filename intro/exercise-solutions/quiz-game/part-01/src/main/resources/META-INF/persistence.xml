@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Bu dosyanın "resources/META-INF" altında olması önemlidir.
+  "resources" altındaki dosyalar derlenmezler ancak jar/war
+  dosyasının içine kopyalanır ve classpath'de erişilebilir
+  olurlar. Modül derlendiğinde "target/classes" altında .class
+  dosyaları ile birlikte kopyalanan dosyaları görebilirsiniz.
+-->
+
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+
+
+
+    <persistence-unit name="DB" transaction-type="RESOURCE_LOCAL">
+        <!--
+        RESOURCE_LOCAL anlamı "transaction"'ları manuel olarak ele alacağız demektir. Java Standart
+        Edition'da (SE) JPA/Hibernate kullanırken olabilir bi durumdur. Daha sonra "JTA" kullanarak
+        JEE container'ına otomatik olarak nasıl belirteceğimizi daha sonra göreceğiz.
+        -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+
+        <properties>
+            <!-- test için gömülü bir veritabanı (H2 gibi) kullanacağız-->
+            <property name="connection.driver_class" value="org.h2.Driver"/>
+            <!-- H2 veritabanına bağlantıyı belirtiyoruz -->
+            <property name="hibernate.connection.url" value="jdbc:h2:./target/db"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <!--
+            Aşağıdaki komut sayesinde her yeni bağlantıda veritabanını silerek yeniden oluşturacaktır.
+            Oluştururken classpath'deki @Entity sınıfları temel alacaktır.
+            -->
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <!-- Hibernate tarafından yürütülen SQL ifadelerini konsola yazar -->
+            <property name="hibernate.show_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
+
+

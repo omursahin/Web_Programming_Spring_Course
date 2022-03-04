@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+
+
+<ui:composition template="../layout.xhtml">
+
+    <ui:define name="title">
+        JSTL (JSP Standard Tag Library) Örneği
+    </ui:define>
+
+    <ui:define name="content">
+
+        <!-- Bu dosyanın farklı yerlerinde kullanmak için "max" değişkeni tanımlandı -->
+        <c:set var="max" value="10"></c:set>
+
+        <!--
+            "c:if" içindeki değerler test'in içindeki kısım true gelirse HTML içeriisnde bulunacaktır
+            yoksa JSF Servlet burayı es geçecektir.
+        -->
+        <c:if test="#{commentController.getMostRecentComments(max).size() == 0}">
+            <h3>No comment has been posted yet... be the first one!</h3>
+        </c:if>
+
+        <!-- Yeni yorum girilebilmesi için bir form -->
+        <h:form id="createForm">
+            <h:inputTextarea value="#{commentController.formText}" id="createText"/>
+            <h:commandButton value="Create" action="#{commentController.createNewComment}" id="createButton"/>
+        </h:form>
+
+        <!--
+            Not: Burada hala temel HTML taglarını kullanıp JSF ile birlikte çalıştırabiliriz
+        -->
+        <hr/>
+
+        <!--
+            "c:choose"'u bir if (c:when)/else(c:otherwise) gibi düşünebiliriz
+        -->
+        <c:choose>
+            <c:when test="#{commentController.getMostRecentComments(max).size() == 0}">
+                <h:outputText value="No events yet"/>
+            </c:when>
+
+            <c:otherwise>
+                <!--
+                    Her bir yorum için bir tablo oluşturuyoruz ancak yalnızca sütun tanımlamak yeterli olacaktır.
+                    Satırları JSF otomatik olarak kendi oluşturur.
+                -->
+                <h:dataTable value="#{commentController.getMostRecentComments(max)}"
+                             var="comment" border="1" id="commentTable">
+                    <!--
+                        Pratikte burada JSF getMostRecentComments'den List<Comment> alıyor ve
+                        her bir döngüde mevcut commenti bir değişkene atıyor (ör, var="comment" gibi) >
+                    -->
+                    <h:column>
+                        <f:facet name="header">Created</f:facet> <!-- Sütun adı -->
+                        <h:outputText value="#{comment.date}"> <!-- mevcut değer -->
+                            <!-- burada JSF'e java.util.Date nesnesi nasıl formatlanacak onu söylüyoruz -->
+                            <f:convertDateTime pattern="dd/MM/yyyy, HH:mm:ss" />
+                        </h:outputText>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Text</f:facet>
+                        <h:outputText value="#{comment.text}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Action</f:facet>
+                        <!--
+                            Bu butona tıklandığında, form POST HTTP isteği ile gönderilir. Burada JSF'e bu satırdaki
+                            yorumun id değeriyle birlikte deleteComment'i çağırması söylenir.
+
+                            Not: action'lar kısa olmalıdır, örneğin yalnızca tek bir metodun parametre ile çağırılması gibi
+                            Eğer daha fazla karmaşıklık gerekiyorsa bunu Bean içinde çözmelisiniz arayüzde değil.
+                          -->
+                        <h:form id="deleteForm">
+                            <h:commandButton value="Delete" action="#{commentController.deleteComment(comment.id)}"
+                                             id="deleteButton"/>
+                        </h:form>
+                    </h:column>
+                </h:dataTable>
+            </c:otherwise>
+        </c:choose>
+    </ui:define>
+
+</ui:composition>
+
+</html>

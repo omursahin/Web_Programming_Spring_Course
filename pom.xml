@@ -1,0 +1,544 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.webp</groupId>
+    <artifactId>webp</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Web Programming</name>
+
+    <modules>
+        <module>misc</module>
+        <module>intro</module>
+    </modules>
+
+    <!--
+        Maven aşamaları:
+        https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html#Lifecycle_Reference
+
+        Temel olanlar:
+
+        *clean*
+        compile
+        process-test-classes
+        test
+        package
+        pre-integration-test
+        integration-test
+        post-integration-test
+        verify
+        install
+        deploy
+
+        *clean* hariç, yukarıdakilerden biri çalıştırılırsa (örneğin "mvn test") önceki aşamalar da çalıştırılır
+
+        clean: "target" klasörü içindeki her şeyi sil
+    -->
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <fs>${file.separator}</fs>
+        <version.java>11</version.java>
+        <!-- FIXME: 2.3.6 hata veriyor... ancak Spring Cloud 2.4.x'i desteklediği anda doğrudan atlanabilir -->
+        <version.springboot>2.3.5.RELEASE</version.springboot>
+        <version.junit>5.7.0</version.junit>
+        <version.junit.platform>1.5.2</version.junit.platform>
+        <version.jacoco>0.8.5</version.jacoco>
+        <!--  FIXME version 1.4.200 testleri bozuyor, örneğin JPA-JPQL -->
+        <version.h2>1.4.197</version.h2>
+        <version.postgres>42.1.4</version.postgres>
+        <version.resteasy>3.1.3.Final</version.resteasy>
+        <version.testcontainers>1.15.1</version.testcontainers>
+        <version.selenium>3.141.59</version.selenium>
+        <!--
+            TODO: Groovy runtime versiyonu çakışması sebebiyle 4.3+'e güncellenemiyor
+        -->
+        <version.restassured>4.2.0</version.restassured>
+        <version.surefire-failsafe>3.0.0-M4</version.surefire-failsafe>
+    </properties>
+
+
+    <dependencies>
+        <!--
+            Bu kod ile bu bağımlılıkları otomatik olarak bütün alt modüllere ekliyoruz
+            <version> ve <scope>, <dependencyManagement> içerisinde tanımlanıyor.
+        -->
+        <!--
+            Jupiter'i bütün modüllere ekliyoruz çünkü neredeyse hepsinde test bulunuyor.
+        -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+        </dependency>
+    </dependencies>
+
+    <!--
+
+    Burada alt modüllerde kullanılan bütün 3. parti bağımlılıkları tanımlıyoruz böylelikle
+    her seferinde <version> ve <scope> taglarını kopyala yapıştır yapmak zorunda kalmıyoruz.
+
+    yeni versiyonları kontrol etmek için kullanabilirsiniz:
+
+    mvn versions:display-dependency-updates -DprocessDependencyManagement=false
+    -->
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- Kendi modüllerimiz -->
+            <dependency>
+                <groupId>org.webp.misc</groupId>
+                <artifactId>test-utils</artifactId>
+                <version>${project.version}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- SpringBoot BOM -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>${version.springboot}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
+                <version>${version.springboot}</version>
+                <scope>test</scope>
+                <!-- varsayılan olarak eklenen JUnit 4 hariç-->
+                <exclusions>
+                    <exclusion>
+                        <groupId>junit</groupId>
+                        <artifactId>junit</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.junit.vintage</groupId>
+                        <artifactId>junit-vintage-engine</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Veritabanı -->
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>${version.h2}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>${version.postgres}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jooq</groupId>
+                <artifactId>jooq</artifactId>
+                <version>3.12.3</version>
+            </dependency>
+
+
+            <!-- test -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${version.junit}</version>
+                <scope>test</scope>
+            </dependency>
+            <!--
+                Arquillian gibi henüz JUnit 5'i desteklemeyen kütüphaneler için gerekli.
+                https://github.com/arquillian/arquillian-core/issues/137
+
+                TODO: Arquillian destekleyince burayı kaldır
+              -->
+            <dependency>
+                <groupId>org.junit.vintage</groupId>
+                <artifactId>junit-vintage-engine</artifactId>
+                <version>${version.junit}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- REST API testi için -->
+                <groupId>io.rest-assured</groupId>
+                <artifactId>rest-assured</artifactId>
+                <version>${version.restassured}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.rest-assured</groupId>
+                <artifactId>json-path</artifactId>
+                <version>${version.restassured}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.rest-assured</groupId>
+                <artifactId>xml-path</artifactId>
+                <version>${version.restassured}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- web servis mock için -->
+                <groupId>com.github.tomakehurst</groupId>
+                <artifactId>wiremock-standalone</artifactId>
+                <version>2.27.2</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- sistem testinde browser kontrolü için -->
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-java</artifactId>
+                <version>${version.selenium}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- sistem testinde browser kontrolü için -->
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-api</artifactId>
+                <version>${version.selenium}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- sistem testinde browser kontrolü için -->
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-chrome-driver</artifactId>
+                <version>${version.selenium}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- sistem testinde browser kontrolü için -->
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-remote-driver</artifactId>
+                <version>${version.selenium}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- sistem testinde browser kontrolü için -->
+                <groupId>org.seleniumhq.selenium</groupId>
+                <artifactId>selenium-support</artifactId>
+                <version>${version.selenium}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- kod kapsamı için -->
+                <groupId>org.jacoco</groupId>
+                <artifactId>org.jacoco.core</artifactId>
+                <version>${version.jacoco}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- Test için docker kullanımında -->
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers</artifactId>
+                <version>${version.testcontainers}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- JUnit 5 desteği için  -->
+                <groupId>org.testcontainers</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${version.testcontainers}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>selenium</artifactId>
+                <version>${version.testcontainers}</version>
+                <scope>test</scope>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.seleniumhq.selenium</groupId>
+                        <artifactId>selenium-remote-driver</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <!-- asenkron eylemlerin beklenmesinde kullanılır -->
+                <groupId>org.awaitility</groupId>
+                <artifactId>awaitility</artifactId>
+                <version>4.0.3</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <!-- nesnelerin mock/stub'ı için -->
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>3.2.0</version>
+                <scope>test</scope>
+            </dependency>
+
+
+            <!-- Çeşitli ıvır zıvırlar -->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>1.2.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>1.7.25</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>28.1-jre</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>2.11.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.dataformat</groupId>
+                <artifactId>jackson-dataformat-xml</artifactId>
+                <version>2.8.9</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.8.6</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>2.3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>2.3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>1.13</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-client</artifactId>
+                <version>${version.resteasy}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jackson-provider</artifactId>
+                <version>${version.resteasy}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.resteasy</groupId>
+                <artifactId>resteasy-jaxb-provider</artifactId>
+                <version>${version.resteasy}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm</artifactId>
+                <version>7.2</version>
+            </dependency>
+
+
+            <!-- cache için -->
+            <dependency>
+                <groupId>net.sf.ehcache</groupId>
+                <artifactId>ehcache</artifactId>
+                <version>2.10.6</version>
+            </dependency>
+            <!-- yeni versiyon kullanamayız gibi görünüyor çünkü HttpClient hala 2.x'e bağımlı-->
+            <!--<dependency>-->
+            <!--<groupId>org.ehcache</groupId>-->
+            <!--<artifactId>ehcache</artifactId>-->
+            <!--<version>3.5.2</version>-->
+            <!--</dependency>-->
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient-cache</artifactId>
+                <version>4.5.12</version>
+            </dependency>
+
+
+        </dependencies>
+    </dependencyManagement>
+
+    <!--
+        Profiles bazı özel durumlarda özel ayarlamalar yapmanızı sağlar
+
+        "-P <id>" kullanarak <id> profilini aktifleştirebilirsiniz.
+
+        mvn verify -P <id>
+
+        Projedeki bütün profilleri görebilmek için (alt-modüllerde tanımlanmış olabilir) kullanabilirsiniz:
+
+        mvn help:all-profiles | grep "Profile Id"
+    -->
+    <profiles>
+    </profiles>
+
+
+    <build>
+
+        <!--
+            dependencyManagement'ta olduğu gibi burada da kullanılacak plugin'leri tanımlayabiliriz.
+            Plugin'leri aktifleştirmek için <plugins> altında olması gerekir.
+            Not: Compiler gibi bazı plugin'ler maven'de varsayılan olarak gelir.
+            Neyin çalıştırıldığını görmek için log'ları inceleyebilirsiniz.
+
+            UYARI: plugin'ler için <version> tagının olduğundan emin olmalısınız.
+            Yoksa Maven yok sayacaktır. Kütüphane'deki <version> tagını unutmaktan
+            daha farklı bir davranış sergileyecektir (kütüphanelerdeki sınıflar/metotlar eksik
+            olduğunda derleme hatası oluşur)
+        -->
+        <pluginManagement>
+            <plugins>
+
+                <!-- Java kodunu derlemek için built-in eklenti -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.8.1</version>
+                    <inherited>true</inherited>
+                    <configuration>
+                        <release>${version.java}</release>
+                    </configuration>
+                </plugin>
+
+                <!-- birim testleri çalıştırmak için kullanılan built-in plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${version.surefire-failsafe}</version>
+                    <configuration>
+                        <forkCount>1</forkCount>
+                        <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                        <rerunFailingTestsCount>3</rerunFailingTestsCount>
+                        <argLine>-Xms512m -Xmx2048m</argLine>
+                    </configuration>
+                </plugin>
+
+                <!-- entegrasyon testlerini çalıştırmak için gerekli -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${version.surefire-failsafe}</version>
+                    <configuration>
+                        <forkCount>1</forkCount>
+                        <redirectTestOutputToFile>true</redirectTestOutputToFile>
+                        <rerunFailingTestsCount>3</rerunFailingTestsCount>
+                        <argLine>-Xms512m -Xmx4096m</argLine>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>integration-test</goal>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <!-- SpringBoot için kendi kendine çalışabilir büyük jar dosyası oluşturmak için gerekli -->
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${version.springboot}</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+
+                <!--
+                    Bazı örnek modüllerde web.xml kullanmayacağımız için War oluştururken
+                    hata meydana gelmesini engelliyoruz
+                -->
+                <plugin>
+                    <artifactId>maven-war-plugin</artifactId>
+                    <version>3.0.0</version>
+                    <configuration>
+                        <failOnMissingWebXml>false</failOnMissingWebXml>
+                    </configuration>
+                </plugin>
+
+                <!-- dosya/klasör adlandırma gibi bazı ANT görevlerini çalıştırmak için -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.8</version>
+                </plugin>
+
+                <!--
+                    testlerin kod kapsamını hesaplamak için
+                -->
+                <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${version.jacoco}</version>
+                    <executions>
+                        <execution>
+                            <id>default-prepare-agent</id>
+                            <phase>initialize</phase>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>default-report</id>
+                            <phase>prepare-package</phase>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>default-prepare-agent-integration</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>prepare-agent-integration</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>default-report-integration</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>report-integration</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- Heroku'ya deployment için -->
+                <plugin>
+                    <groupId>com.heroku.sdk</groupId>
+                    <artifactId>heroku-maven-plugin</artifactId>
+                    <version>2.0.2</version>
+                </plugin>
+                <!-- bilinen güvenlik problemlerinin taranması için -->
+                <plugin>
+                    <groupId>org.owasp</groupId>
+                    <artifactId>dependency-check-maven</artifactId>
+                    <version>5.3.1</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <!--  yarn gibi harici komutları çalıştırmak için -->
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>1.6.0</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

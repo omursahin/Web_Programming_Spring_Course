@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+>
+
+<ui:composition template="layout.xhtml">
+
+    <ui:define name="title">Login / Yeni Kullanıcı Oluştur</ui:define>
+
+    <ui:define name="content">
+
+        <p>
+            Bu yalnızca bir örnektir. Genellikle login ve yeni kullanıcı oluşturma
+            işlemleri farklı sayfalarda olur. Yeni kullanıcı oluştururken de birbiriyle eşleşmesi
+            gereken iki farklı şifre alanı eklenir ve girdilerin doğrulanması gibi eylemler
+            yapılır.
+        </p>
+
+        <h:form id="loginForm">
+
+            <h:panelGrid columns="2">
+                <h:outputLabel value="User name : "/>
+                <h:inputText value="#{loginController.formUserName}" id="userId"/>
+
+                <h:outputLabel value="Password : "/>
+                <h:inputSecret value="#{loginController.formPassword}" id="password"/>
+
+            </h:panelGrid>
+
+            <h:commandButton value="Log in" action="#{loginController.logIn}" id="logIn"/>
+            <h:commandButton value="Sign in" action="#{loginController.registerNew}" id="create"/>
+        </h:form>
+
+    </ui:define>
+
+</ui:composition>
+</html>

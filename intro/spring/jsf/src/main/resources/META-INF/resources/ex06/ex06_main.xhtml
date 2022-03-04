@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+>
+
+
+<ui:composition template="/layout.xhtml">
+
+    <ui:define name="title">
+        Yönlendirme Örneği
+    </ui:define>
+
+    <ui:define name="content">
+
+        <p>
+            Session sayacını 1 artırmak için butona tıkla ve yeni sayfada ne olduğunu gözlemle.
+            Butona tıklama sonucu HTTP POST isteği ile gönderilir.
+        </p>
+
+        <br/>
+
+        <h:form id="formSession">
+            <h:commandButton value="Artır ve İlet" action="#{navigationBean.increaseAndForward()}" id="forwardBtnId"/>
+
+            <br/>
+
+            <h:commandButton value="Artır ve Yönlendir" action="#{navigationBean.increaseAndRedirect()}" id="redirectBtnId"/>
+        </h:form>
+
+
+    </ui:define>
+
+</ui:composition>
+
+</html>

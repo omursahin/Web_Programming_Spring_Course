@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+>
+<head>
+    <title>Dinamik Sayfa Örneği</title>
+</head>
+
+<body>
+<h2>Dinamik Sayfa Örneği</h2>
+
+<p>
+    <a href="../index.html">Anasayfaya</a> geri dön
+</p>
+
+<p>
+    Şu anki tarih: <h:outputText value="#{session.lastAccessedTime}" id="dateTextId">
+                        <f:convertDateTime pattern="MM/dd/yyyy" type="date"/>
+                  </h:outputText>
+</p>
+</body>
+
+</html>
