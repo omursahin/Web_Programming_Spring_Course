@@ -19,7 +19,7 @@ public class IndexPO extends PageObject {
 
     @Override
     public boolean isOnPage() {
-        return getDriver().getTitle().contains("Login Example");
+        return getDriver().getTitle().contains("Login Örneği");
     }
 
     public void toStartingPage() {

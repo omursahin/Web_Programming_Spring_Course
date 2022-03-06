@@ -11,7 +11,7 @@ public class LoginPO extends PageObject {
 
     @Override
     public boolean isOnPage() {
-        return getDriver().getTitle().contains("Login / Create New User");
+        return getDriver().getTitle().contains("Login / Yeni Kullanıcı Oluştur");
     }
 
     public IndexPO createUser(String userId, String password){

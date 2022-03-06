@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class UserTest {
 
+    // Embedable nesneler bir ara tablo olmadan aynı veriyi iki farklı sınıf alanları olarak temsil etmeye yarar.
     private EntityManagerFactory factory;
     private EntityManager em;
 

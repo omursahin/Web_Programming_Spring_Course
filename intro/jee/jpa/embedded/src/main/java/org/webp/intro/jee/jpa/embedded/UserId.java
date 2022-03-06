@@ -23,7 +23,7 @@ import java.util.Objects;
 public class UserId implements Serializable {
 
     /*
-        Bu arada name/surname'i id olarak kullanmak iyi bir fikir değildir çünkü birden fazla insan aynı kombinasoyna sahip olabilir.
+        Bu arada name/surname'i id olarak kullanmak iyi bir fikir değildir çünkü birden fazla insan aynı kombinasyona sahip olabilir.
      */
 
     private String name;

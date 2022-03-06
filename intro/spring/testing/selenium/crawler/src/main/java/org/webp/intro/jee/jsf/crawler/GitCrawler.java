@@ -34,7 +34,7 @@ public class GitCrawler {
     public static void main(String[] args) {
 
 
-        WebDriver driver = SeleniumDriverHandler.getChromeDriver();
+        WebDriver driver = SeleniumDriverHandler.getFirefoxDriver();
 
         try {
             crawl(driver);

@@ -28,7 +28,8 @@ public class SeleniumLocalIT extends SeleniumTestBase{
     @BeforeAll
     public static void initClass(){
 
-        driver = SeleniumDriverHandler.getChromeDriver();
+//        driver = SeleniumDriverHandler.getChromeDriver();
+        driver = SeleniumDriverHandler.getFirefoxDriver();
 
         /*
             Eğer driver erişilebilir değilse (örneğin uzak continuous integration server üzerinde çalışıyorsa),

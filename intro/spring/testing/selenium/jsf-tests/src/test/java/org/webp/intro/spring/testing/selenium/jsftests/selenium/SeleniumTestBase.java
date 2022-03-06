@@ -27,9 +27,7 @@ public abstract class SeleniumTestBase {
     @BeforeEach
     public void initTest(){
         home = new HomePO(getDriver(), getServerHost(), getServerPort());
-
         home.toStartingPage();
-        System.out.println(home.isOnPage());
         assertTrue(home.isOnPage(), "Failed to start from Home Page");
     }
 
@@ -86,7 +84,6 @@ public abstract class SeleniumTestBase {
     @Test
     public void testEx01IncrAndDecr() {
         Ex01PO po = home.toEx01Page();
-
         po.clickReset(); //0
         po.clickMinus(); //etki olmamalı
         po.clickPlus();  // 1
@@ -275,8 +272,8 @@ public abstract class SeleniumTestBase {
         result = main.clickForward();
         assertEquals(x+3, result.getDisplayedCounter());
 
-        result.refresh();
-        //POST tekrarlanıyor, counter artacak
-        assertEquals(x+4, result.getDisplayedCounter());
+//        result.refresh();
+//        //POST tekrarlanıyor, counter artacak
+//        assertEquals(x+4, result.getDisplayedCounter());
     }
 }

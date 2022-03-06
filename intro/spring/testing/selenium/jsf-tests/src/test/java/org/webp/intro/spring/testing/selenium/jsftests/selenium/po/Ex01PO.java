@@ -22,7 +22,7 @@ public class Ex01PO extends PageObject {
 
     @Override
     public boolean isOnPage(){
-        return getDriver().getTitle().contains("Basit sayaç");
+        return getDriver().getTitle().contains("Basit Sayaç Örneği");
     }
 
     /*

@@ -46,6 +46,11 @@ public abstract class PageObject {
 
     public void refresh(){
         driver.navigate().refresh();
+//        try {
+//            driver.switchTo().alert().accept(); // Sayfa yenilemek için bir alert çıkarsa onaylamak için
+//        } catch (NoAlertPresentException e){
+//
+//        }
     }
 
     public void clickAndWait(String id){

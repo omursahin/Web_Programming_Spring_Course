@@ -13,7 +13,7 @@ public class ProtectedPO extends PageObject {
 
     @Override
     public boolean isOnPage() {
-        return getDriver().getTitle().contains("Protected resource");
+        return getDriver().getTitle().contains("Korunan Kaynak");
     }
 
     public IndexPO doLogout(){

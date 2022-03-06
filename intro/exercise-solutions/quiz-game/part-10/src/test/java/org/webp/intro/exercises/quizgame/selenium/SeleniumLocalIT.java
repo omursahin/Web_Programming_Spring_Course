@@ -49,7 +49,7 @@ public class SeleniumLocalIT {
     @BeforeAll
     public static void initClass() {
 
-        driver = SeleniumDriverHandler.getChromeDriver();
+        driver = SeleniumDriverHandler.getFirefoxDriver();
 
         //Testlerde başarısız olmamak için.
         assumeTrue(driver != null, "Cannot find/initialize Chrome driver");

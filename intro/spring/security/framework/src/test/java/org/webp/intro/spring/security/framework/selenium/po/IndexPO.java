@@ -20,7 +20,7 @@ public class IndexPO extends PageObject {
 
     @Override
     public boolean isOnPage() {
-        return getDriver().getTitle().contains("Spring Security Example");
+        return getDriver().getTitle().contains("Spring Security Örneği");
     }
 
     public void toStartingPage() {
