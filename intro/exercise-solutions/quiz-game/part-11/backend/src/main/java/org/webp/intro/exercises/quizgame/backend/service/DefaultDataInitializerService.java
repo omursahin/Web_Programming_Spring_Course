@@ -103,12 +103,12 @@ public class DefaultDataInitializerService {
 
         createQuiz(
                 sub,
-                "Which grade will you get if you submit a project that is vulnerable to SQL Injection attacks?",
-                "One grade less (e.g., a B turns into a C)",
-                "Two grades less (e.g., a B turns into a D)",
-                "An A, because so your lecturer can have fun hacking your web site",
-                "A straight F, regardless of what done in the rest of the project",
-                3);
+                "SQL injection ile ilgili hangisi doğrudur?",
+                "Parametreli veriler hiçbir şekilde değiştirilemez",
+                "SQL ifadelerinden oluşan prosedürler SQL injection açısından incelenmelidir",
+                "SQL injection günümüzde çok sık rastlanan bir atak türü değildir",
+                "Hiçbiri",
+                1);
 
     }
 
