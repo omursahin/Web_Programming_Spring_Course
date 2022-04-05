@@ -206,7 +206,7 @@ public class UserTest {
         assertFalse(persistInATransaction(user));
 
         /*
-            not: eğer bu dersi 2023'de vermeye devam edersem test hata verecektir
+            not: eğer bu dersi 2033'de vermeye devam edersem test hata verecektir
             ancak o yıla kadar JEE veya Java bulunur mu bilemem :)
          */
     }

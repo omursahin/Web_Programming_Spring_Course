@@ -95,7 +95,6 @@ public class UserTest {
 
     @Test
     public void testGetAll() {
-
         TypedQuery<User> query = em.createNamedQuery(User.GET_ALL, User.class);
 
         //READ operasyonu oldugu icin transaction'a gerek yok

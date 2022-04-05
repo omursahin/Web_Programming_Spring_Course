@@ -10,6 +10,7 @@
             <!-- Arquillian'a Wildfly'ı nereye nereye kuracağını söylemek için gerekmektedir -->
             <property name="jbossHome">target/downloaded_Wildfly/wildfly</property>
             <property name="outputToConsole">true</property>
+            <property name="javaVmArguments">-Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=y</property>
         </configuration>
     </container>
 

@@ -12,7 +12,7 @@ import java.time.LocalDate;
     Kısıtlamalar (constraints) neden kullanılır? En az 3 temel sebebi bulunmaktadır:
 
     1) Eğer bir şeyler yolunda gitmezse (kodda bug bulunması gibi), olabildiği kadar hızlı bir şekilde hata meydana
-    gelmesini istersiniz (debeg sırasında yardımcı olacaktır)
+    gelmesini istersiniz (debug sırasında yardımcı olacaktır)
 
     2) sınırları belli bir dokumantasyon olusturmakta kullanılabilir
 

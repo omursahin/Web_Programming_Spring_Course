@@ -42,7 +42,6 @@ public class User {
     @ElementCollection
     private List<String> roles;
 
-
     public User(){}
 
     public Long getId() {
